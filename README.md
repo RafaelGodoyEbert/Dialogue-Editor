@@ -1,4 +1,5 @@
 # Dialogue Editor by RafaGodoy & Krisp
+[English](https://github.com/RafaelGodoyEbert/Dialogue-Editor/blob/main/README.md) [Português](https://github.com/RafaelGodoyEbert/Dialogue-Editor/blob/main/README_portuguese.md)
 
 ![image (1)](https://github.com/RafaelGodoyEbert/Dialogue-Editor/assets/78083427/325c9804-068e-41fa-a404-2416097b527a)
 
