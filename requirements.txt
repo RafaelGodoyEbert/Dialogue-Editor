@@ -1,0 +1,5 @@
+tk==0.1.0
+tqdm==4.66.4
+googletrans==4.0.0rc1
+pillow==10.3.0
+six==1.16.0
