@@ -7,6 +7,7 @@ import six
 from tkinter import ttk
 from tqdm import tqdm
 import six
+import locale
 from i18n.i18n import I18nAuto
 i18n = I18nAuto()
 
@@ -27,7 +28,7 @@ class PageEntry:
         return self.image_tk
 
 class DialogueEditor:
-    def __init__(self, root):
+    def __init__(self, root, parent):
         self.current_page_index = 0
         self.root = root
         self.root.title("Dialogue Editor by RafaGodoy & Krisp")
@@ -37,6 +38,7 @@ class DialogueEditor:
         self.break_tag = "<nl>"
         self.text_color = "black"
         self.font_size = 25
+        self.LineHeight = 30.0
         self.text_position = (10, 10)
         self.file_opened = False
         self.current_index = None
@@ -44,7 +46,7 @@ class DialogueEditor:
         self.page_entries = []
         self.font = ImageFont.truetype("arial.ttf", self.font_size)
         self.file_path = ''  
-        self.file_opened = False 
+        self.file_opened = False
         
         self.create_menu()
         self.create_widgets()
@@ -157,6 +159,13 @@ class DialogueEditor:
         self.page_tag_entry.grid(row=0, column=1, padx=5, pady=5, sticky='w')
         self.page_tag_entry.insert(tk.END, self.page_tag)  
         self.page_tag_entry.bind("<KeyRelease>", self.update_page_tag)  
+        
+        self.page_tag_label = tk.Label(self.controls_frame, text=i18n("Line Height:"))
+        self.page_tag_label.grid(row=1, column=0, padx=5, pady=5, sticky='e')
+        self.page_tag_entry = tk.Entry(self.controls_frame)
+        self.page_tag_entry.grid(row=1, column=1, padx=5, pady=5, sticky='w')
+        self.page_tag_entry.insert(tk.END, self.LineHeight)  
+        self.page_tag_entry.bind("<KeyRelease>", self.update_LineHeight)
 
         self.break_tag_label = tk.Label(self.controls_frame, text=i18n("Break Tag:"))
         self.break_tag_label.grid(row=0, column=2, padx=5, pady=5, sticky='e')
@@ -174,7 +183,7 @@ class DialogueEditor:
 
         self.text_position_label = tk.Label(self.controls_frame, text=i18n("Text Position (X, Y):"))
         self.text_position_label.grid(row=0, column=7, padx=5, pady=5, sticky='e')
-        self.text_position_entry = tk.Entry(self.controls_frame)
+        self.text_position_entry = tk.Entry(self.controls_frame, width=10) # , width=15) é um tamanho interessante também
         self.text_position_entry.grid(row=0, column=8, padx=5, pady=5, sticky='w')
         self.text_position_entry.bind("<KeyRelease>", self.update_text_position)  
 
@@ -422,16 +431,13 @@ class DialogueEditor:
             self.display_current_page()
                 
     def display_current_page(self):
-        if self.page_entries:
+        if self.page_entries and self.image is not None:
             current_page = self.page_entries[self.current_page_index]
             image = self.image.copy()
             draw = ImageDraw.Draw(image)
             y = self.text_position[1]
             max_width = 0
-            
-            # Obter a altura da fonte diretamente do atributo self.font.size
-            text_height = self.font.size
-            
+
             for line in current_page:
                 # Remover todas as tags {} e o prefixo '0xXXXX ='
                 line = re.sub(r'(\{.*?\}|\[.*?\]|\<.*?\>|0x[0-9A-Fa-f]+ =)', '', line)
@@ -441,11 +447,11 @@ class DialogueEditor:
                     # Usar getlength() para obter a largura do texto
                     text_width = self.font.getlength(l)
                     max_width = max(max_width, text_width)
-                    y += text_height  # Incrementa a posição Y para a próxima linha
+                    y += self.LineHeight  # Incrementa a posição Y para a próxima linha usando lineHeight
             self.image_tk = ImageTk.PhotoImage(image)
             self.image_label.config(image=self.image_tk)
         else:
-            # Se não houver diálogos carregados, limpe a imagem exibida
+            # Se não houver diálogos carregados ou imagem carregada, limpe a imagem exibida
             self.image_label.config(image=None)
     
     def load_font(self):
@@ -460,7 +466,23 @@ class DialogueEditor:
         else:
             self.font = ImageFont.truetype("arial.ttf", self.font_size)
         self.display_dialogue(self.dialogue_display.get('1.0', tk.END).strip())
+        
+    def update_LineHeight(self, event):
+        value = self.page_tag_entry.get()
+        try:
+            line_height = locale.atof(value)
+            if line_height <= 0:
+                raise ValueError  # Levantar uma exceção se o valor for negativo ou zero
+            self.LineHeight = line_height
+            if hasattr(self, 'font_path'):
+                self.font = ImageFont.truetype(self.font_path, self.font_size)
+            else:
+                self.font = ImageFont.truetype("arial.ttf", self.font_size)
+            self.display_current_page()
+        except ValueError:
+            print("Invalid input for LineHeight. Please enter a positive number.")
 
+        
     def choose_text_color(self):
         color = colorchooser.askcolor(title=i18n("Choose Text Color"))
         if color:
@@ -522,8 +544,9 @@ class DialogueEditor:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = DialogueEditor(root)
-    root.geometry("1280x720")  # Define o tamanho da janela principal para 800x600 pixels
+    app = DialogueEditor(root, root)  # Passando root como o widget pai
+    root.geometry("1280x720")  # Define o tamanho da janela principal para 1280x720 pixels
     root.mainloop()
+
     
 
