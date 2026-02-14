@@ -1,6 +1,6 @@
 @echo off
 
-call myenv/scripts/activate
+call myenv\Scripts\activate
 
 python Dialogue_Editor.py
 

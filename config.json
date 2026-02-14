@@ -1,0 +1,16 @@
+{
+    "page_tag": "",
+    "break_tag": "[n]",
+    "text_color": "#ffffff",
+    "font_size": 50,
+    "line_height": 60.0,
+    "text_position": [
+        250,
+        220
+    ],
+    "font_path": "C:/Users/rafam/Downloads/a/Dialogue-Editor/Fontsona5Royal.ttf",
+    "source_lang": "english",
+    "target_lang": "portuguese",
+    "last_image_path": "C:/Users/rafam/Downloads/a/Dialogue-Editor/persona.png",
+    "theme_mode": "dark"
+}
