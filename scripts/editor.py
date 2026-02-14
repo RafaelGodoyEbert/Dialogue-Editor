@@ -46,9 +46,12 @@ class DialogueEditor(QMainWindow):
         self.current_index = -1
         self.current_page_index = 0
         self.page_entries = []
+        self.original_page_entries = [] # For comparison
         self.image = None
         self.last_image_path = self.config.get("last_image_path", "")
         self.font_path = self.config.get("font_path", "arial.ttf")
+        
+        self.comparison_mode = False
         
         # Load last image if exists
         if self.last_image_path and os.path.exists(self.last_image_path):
@@ -157,25 +160,48 @@ class DialogueEditor(QMainWindow):
         right_layout = QVBoxLayout(right_panel)
         right_layout.setContentsMargins(10, 10, 10, 10)
         
-        # Text Editor - Fixed height
-        self.text_display = QTextEdit()
-        self.text_display.setFixedHeight(120)
-        self.text_display.textChanged.connect(self.update_text_on_image)
-        right_layout.addWidget(self.text_display, 0)
+        # Dual Text Editors (Original vs Target)
+        editor_layout = QHBoxLayout()
+        editor_layout.setSpacing(10)
         
-        # Image Preview Container - DOMINANT SPACE
+        # Original Text (Read-only)
+        self.text_display_left = QTextEdit()
+        self.text_display_left.setFixedHeight(120)
+        self.text_display_left.setReadOnly(True)
+        self.text_display_left.setPlaceholderText(i18n("Original Text..."))
+        self.text_display_left.setObjectName("editorLeft")
+        self.text_display_left.setVisible(False) # Start hidden
+        editor_layout.addWidget(self.text_display_left, 1)
+        
+        # Target Text (Editable)
+        self.text_display_right = QTextEdit()
+        self.text_display_right.setFixedHeight(120)
+        self.text_display_right.textChanged.connect(self.update_text_on_image)
+        self.text_display_right.setPlaceholderText(i18n("Translate to Portuguese here..."))
+        self.text_display_right.setObjectName("editorRight")
+        editor_layout.addWidget(self.text_display_right, 1)
+        
+        right_layout.addLayout(editor_layout, 0)
+        
         self.image_container = QFrame()
         self.image_container.setObjectName("imagePreview")
         self.image_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        container_layout = QVBoxLayout(self.image_container)
-        container_layout.setContentsMargins(0,0,0,0)
+        container_layout = QHBoxLayout(self.image_container)
+        container_layout.setContentsMargins(5,5,5,5)
+        container_layout.setSpacing(10)
         
-        self.image_label = QLabel()
-        self.image_label.setAlignment(Qt.AlignCenter)
-        self.image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
-        container_layout.addWidget(self.image_label)
+        self.image_label_left = QLabel()
+        self.image_label_left.setAlignment(Qt.AlignCenter)
+        self.image_label_left.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self.image_label_left.setVisible(False)
+        container_layout.addWidget(self.image_label_left, 1) # Add stretch factor 1
+
+        self.image_label_right = QLabel()
+        self.image_label_right.setAlignment(Qt.AlignCenter)
+        self.image_label_right.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        container_layout.addWidget(self.image_label_right, 1) # Add stretch factor 1
         
-        right_layout.addWidget(self.image_container, 1) # Stretch 1 to take all middle space
+        right_layout.addWidget(self.image_container, 1)
         
         # Controls Grid - AT BOTTOM
         controls_group = QFrame()
@@ -224,8 +250,14 @@ class DialogueEditor(QMainWindow):
         self.translate_line_btn = QPushButton(i18n("Translate Line"))
         self.translate_line_btn.clicked.connect(self.translate_text_command)
         
+        self.compare_btn = QPushButton(i18n("Compare"))
+        self.compare_btn.setObjectName("secondaryBtn")
+        self.compare_btn.setCheckable(True)
+        self.compare_btn.clicked.connect(self.toggle_comparison)
+
         btn_layout.addWidget(self.prev_btn)
         btn_layout.addWidget(self.next_btn)
+        btn_layout.addWidget(self.compare_btn)
         btn_layout.addWidget(self.translate_line_btn)
         controls_grid.addLayout(btn_layout, 2, 0, 1, 6)
         
@@ -392,6 +424,13 @@ class DialogueEditor(QMainWindow):
                 border-color: {c['dim_text']};
             }}
 
+            #editorLeft {{
+                border: 2px solid #ef4444;
+            }}
+            #editorRight {{
+                border: 2px solid #10b981;
+            }}
+
             QProgressBar {{
                 border: 1px solid {c['border']};
                 border-radius: 10px;
@@ -497,36 +536,49 @@ class DialogueEditor(QMainWindow):
         if row < 0: return
         self.current_index = row
         text = self.dialogues[row].strip()
-        self.text_display.blockSignals(True)
-        self.text_display.setPlainText(text)
-        self.text_display.blockSignals(False)
+        orig_text = self.original_dialogues[row].strip()
+        
+        # Update both displays
+        self.text_display_left.setPlainText(orig_text)
+        
+        self.text_display_right.blockSignals(True)
+        self.text_display_right.setPlainText(text)
+        self.text_display_right.blockSignals(False)
+        
         self.current_page_index = 0
-        self.display_dialogue(text, keep_current_page=True)
+        self.display_dialogue(text, orig_text, keep_current_page=True)
 
     def update_text_on_image(self):
         if self.current_index < 0: return
-        text = self.text_display.toPlainText()
+        text = self.text_display_right.toPlainText()
         self.dialogues[self.current_index] = text + "\n"
         item = self.listbox.item(self.current_index)
         if item:
             item.setText(text.strip())
-        self.display_dialogue(text, keep_current_page=True)
+        # Re-fetch original for comparison consistency
+        orig_text = self.original_dialogues[self.current_index].strip()
+        self.display_dialogue(text, orig_text, keep_current_page=True)
 
-    def display_dialogue(self, dialogue, keep_current_page=False):
-        # Prevent crash if tags are empty
+    def display_dialogue(self, dialogue, original=None, keep_current_page=False):
+        # Current dialogue
         if self.page_tag:
-            page_entries = dialogue.split(self.page_tag)
+            self.page_entries = [p.split(self.break_tag) if self.break_tag else [p] for p in dialogue.split(self.page_tag)]
         else:
-            page_entries = [dialogue]
-
-        self.page_entries = []
-        for entry in page_entries:
-            if self.break_tag:
-                break_entries = entry.split(self.break_tag)
-            else:
-                break_entries = [entry]
-            self.page_entries.append([b.strip() for b in break_entries if b.strip()])
+            self.page_entries = [[b.strip() for b in dialogue.split(self.break_tag)] if self.break_tag else [dialogue]]
         
+        # Cleanup page entries
+        self.page_entries = [[line.strip() for line in page if line.strip()] for page in self.page_entries]
+
+        # Original dialogue
+        if original:
+            if self.page_tag:
+                self.original_page_entries = [p.split(self.break_tag) if self.break_tag else [p] for p in original.split(self.page_tag)]
+            else:
+                self.original_page_entries = [[b.strip() for b in original.split(self.break_tag)] if self.break_tag else [original]]
+            self.original_page_entries = [[line.strip() for line in page if line.strip()] for page in self.original_page_entries]
+        else:
+            self.original_page_entries = []
+
         if not keep_current_page:
             self.current_page_index = 0
             
@@ -535,51 +587,79 @@ class DialogueEditor(QMainWindow):
 
     def display_current_page(self):
         if self.image is None:
-            self.image_label.clear()
+            self.image_label_left.clear()
+            self.image_label_right.clear()
             return
 
         c = self.themes.get(self.theme_mode, self.themes["light"])
         bg_rgb = c.get("render_bg", (255, 255, 255))
 
-        # Handle transparent PNGs - convert to RGB with theme-aware background
+        # Comparison Mode logic
+        if self.comparison_mode:
+            self.image_label_left.setVisible(True)
+            # Render Original (Left)
+            if self.original_page_entries:
+                pix_orig = self.render_text_to_pixmap(self.original_page_entries, self.text_color, bg_rgb)
+                self.set_pixmap_to_label(self.image_label_left, pix_orig)
+            else:
+                self.image_label_left.clear()
+            
+            # Render Current (Right)
+            if self.page_entries:
+                pix_curr = self.render_text_to_pixmap(self.page_entries, self.text_color, bg_rgb)
+                self.set_pixmap_to_label(self.image_label_right, pix_curr)
+            else:
+                self.image_label_right.clear()
+        else:
+            self.image_label_left.setVisible(False)
+            if self.page_entries:
+                pix_curr = self.render_text_to_pixmap(self.page_entries, self.text_color, bg_rgb)
+                self.set_pixmap_to_label(self.image_label_right, pix_curr)
+            else:
+                self.image_label_right.clear()
+
+    def render_text_to_pixmap(self, entries, color, bg_rgb):
+        # Handle transparent PNGs
         if self.image.mode in ('RGBA', 'LA') or (self.image.mode == 'P' and 'transparency' in self.image.info):
             img_copy = Image.new("RGB", self.image.size, bg_rgb)
             img_copy.paste(self.image, mask=self.image.split()[3] if self.image.mode == 'RGBA' else None)
         else:
             img_copy = self.image.copy().convert("RGB")
-            # For non-transparent images that might be smaller, we could also fill
-            # but usually they fill the whole area.
             
-        if self.page_entries:
-            current_page = self.page_entries[self.current_page_index % len(self.page_entries)]
-            draw = ImageDraw.Draw(img_copy)
-            y = self.text_position[1]
-            rgb_color = (self.text_color.red(), self.text_color.green(), self.text_color.blue())
+        current_page = entries[self.current_page_index % len(entries)]
+        draw = ImageDraw.Draw(img_copy)
+        y = self.text_position[1]
+        rgb_color = (color.red(), color.green(), color.blue())
 
-            for line in current_page:
-                clean_line = re.sub(r'(\{.*?\}|\[.*?\]|\<.*?\>|0x[0-9A-Fa-f]+ =)', '', line)
-                if self.break_tag:
-                    sub_lines = clean_line.split(self.break_tag)
-                else:
-                    sub_lines = [clean_line]
-                    
-                for sl in sub_lines:
-                    draw.text((self.text_position[0], y), sl, font=self.pil_font, fill=rgb_color)
-                    y += self.line_height
+        for line in current_page:
+            clean_line = re.sub(r'(\{.*?\}|\[.*?\]|\<.*?\>|0x[0-9A-Fa-f]+ =)', '', line)
+            sub_lines = clean_line.split(self.break_tag) if self.break_tag else [clean_line]
+            for sl in sub_lines:
+                draw.text((self.text_position[0], y), sl, font=self.pil_font, fill=rgb_color)
+                y += self.line_height
         
-        qimage = ImageQt(img_copy)
-        pixmap = QPixmap.fromImage(qimage)
-        
-        # Scale pixmap properly
-        if not self.image_label.size().isEmpty():
-            scaled_pixmap = pixmap.scaled(
-                self.image_label.size(), 
-                Qt.KeepAspectRatio, 
-                Qt.SmoothTransformation
-            )
-            self.image_label.setPixmap(scaled_pixmap)
+        return QPixmap.fromImage(ImageQt(img_copy))
+
+    def set_pixmap_to_label(self, label, pixmap):
+        if not label.size().isEmpty():
+            scaled = pixmap.scaled(label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            label.setPixmap(scaled)
         else:
-            self.image_label.setPixmap(pixmap)
+            label.setPixmap(pixmap)
+
+    def toggle_comparison(self):
+        self.comparison_mode = self.compare_btn.isChecked()
+        
+        # Toggle visibility immediately to trigger layout recalculation
+        self.text_display_left.setVisible(self.comparison_mode)
+        self.image_label_left.setVisible(self.comparison_mode)
+        
+        # Clear left label if leaving comparison to ensure clean state
+        if not self.comparison_mode:
+            self.image_label_left.clear()
+
+        # Refresh visuals with a delay to allow layout to finish resizing
+        QTimer.singleShot(100, self.display_current_page)
 
 
     def resizeEvent(self, event):
@@ -589,12 +669,12 @@ class DialogueEditor(QMainWindow):
 
     def update_page_tag(self):
         self.page_tag = self.page_tag_entry.text()
-        self.display_dialogue(self.text_display.toPlainText(), True)
+        self.display_dialogue(self.text_display_right.toPlainText(), self.text_display_left.toPlainText(), True)
         self.save_current_config()
 
     def update_break_tag(self):
         self.break_tag = self.break_tag_entry.text()
-        self.display_dialogue(self.text_display.toPlainText(), True)
+        self.display_dialogue(self.text_display_right.toPlainText(), self.text_display_left.toPlainText(), True)
         self.save_current_config()
 
     def update_font_size(self):
@@ -647,6 +727,7 @@ class DialogueEditor(QMainWindow):
         if path:
             with open(path, 'r', encoding='utf-8') as f:
                 self.dialogues = f.readlines()
+            self.original_dialogues = list(self.dialogues) # Store original state
             self.file_path = path
             self.file_opened = True
             self.search_dialogues()
@@ -691,7 +772,7 @@ class DialogueEditor(QMainWindow):
 
     def translate_file_command(self):
         if not self.file_opened:
-            QMessageBox.warning(self, "Error", "No file opened.")
+            QMessageBox.warning(self, i18n("Error"), i18n("No file opened."))
             return
             
         self.progress_bar.setVisible(True)
@@ -714,12 +795,12 @@ class DialogueEditor(QMainWindow):
 
     def translate_text_command(self):
         if self.current_index < 0: return
-        text = self.text_display.toPlainText()
+        text = self.text_display_right.toPlainText()
         source_lang = self.source_lang_combo.currentText()
         target_lang = self.target_lang_combo.currentText()
         
         translated = self.translation_service.translate_text(text, source_lang, target_lang)
-        self.text_display.setPlainText(translated)
+        self.text_display_right.setPlainText(translated)
         self.update_text_on_image()
 
     def show_credits(self):
@@ -729,7 +810,7 @@ class DialogueEditor(QMainWindow):
     def closeEvent(self, event):
         self.save_current_config()
         if self.file_opened:
-            ret = QMessageBox.question(self, "Exit", "Save before exiting?", 
+            ret = QMessageBox.question(self, i18n("Exit"), i18n("Save before exiting?"), 
                                      QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
             if ret == QMessageBox.Yes:
                 self.save_file_path()

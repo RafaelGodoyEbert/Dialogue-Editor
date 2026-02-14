@@ -1,81 +1,62 @@
-# Dialogue Editor by RafaGodoy & Krisp
+# Dialogue Editor Premium by RafaGodoy & Krisp
 [English](https://github.com/RafaelGodoyEbert/Dialogue-Editor/blob/main/README.md) [Português](https://github.com/RafaelGodoyEbert/Dialogue-Editor/blob/main/README_portuguese.md)
 
-![image (1)](https://github.com/RafaelGodoyEbert/Dialogue-Editor/assets/78083427/325c9804-068e-41fa-a404-2416097b527a)
+<img width="1276" height="832" alt="image" src="https://github.com/user-attachments/assets/865b2e3c-722b-41be-b3a4-d20a083b4908" />
 
 ## About the Project
 
-**Dialogue Editor** is a tool for editing interactive dialogues, created by Rafael Godoy & Krisp. This application allows you to load dialogues from text files, display them, and edit them directly in a graphical interface. Additionally, you can translate the dialogues into different languages and overlay text on images.
+**Dialogue Editor Premium** is an advanced tool for dialogue editing and visualization, rebuilt from scratch in **PySide6** to offer a fluid and professional experience. The goal is to allow translators and editors to visualize the final text result in-game (in real-time over background images) while working, facilitating the adjustment of line breaks and positioning.
 
-## Features
+### ⚠️ Translation and AI Philosophy
+This project integrates machine translation tools as an **aid**, not a substitute. We believe that AI should be used as a support to speed up the workflow and suggest paths, but never as a definitive "amulet" or crutch. Human review, cultural context, and the translator's sensitivity are indispensable for quality localization.
 
-- **Load and Save Dialogues**: Open and save text files containing dialogues.
-- **Text Editing**: Edit the dialogues directly in the graphical interface.
-- **Search Filter**: Search for specific dialogues.
-- **Translation**: Translate dialogues using Google Translate.
-- **Text Overlay on Images**: Load an image and overlay text on it.
-- **Page Navigation**: Navigate between different pages of dialogue.
-- **Font and Text Color Selection**: Customize the font and text color.
+## New Features (Premium Version)
+
+- **PySide6 Engine**: Modern, fast, and fully responsive interface.
+- **Theme System**: Choose between **Light**, **Dark (Midnight)** and **Mocha (Catppuccin)** modes for better visual comfort.
+- **Comparison Mode (Dual View)**: Visualize the original text (in English) and your translation side-by-side, both in the editor and in the preview image.
+- **Adaptive Preview**: The image automatically adjusts to the window resolution without losing its aspect ratio.
+- **Smart Image Background**: Support for transparent PNGs that automatically adapt to the chosen theme color.
+- **Settings Persistence**: The program remembers your last theme, last used image, font, colors, and positions.
+- **Integrated Translation**: Translate individual lines or complete files with progress bar support.
 
 ## How to Use
 
 ### Requirements
 
-- Python 3.x
-- Libraries:
-  - `tkinter`
-  - `Pillow`
-  - `googletrans`
-  - `tqdm`
-  - `i18n`
+- Python 3.10 or higher
+- Libraries: `PySide6`, `Pillow`, `googletrans`
 
 ### Installation
 
 1. Clone the repository:
-
 ```bash
 git clone https://github.com/RafaelGodoyEbert/Dialogue-Editor
 cd dialogue-editor
 ```
 
-2. Install the dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+2. Use the automatic installer (Windows):
+Run the `install.bat` file. It will create the virtual environment and install all necessary dependencies.
 
 ### Running the Application
 
-To start the application, run the following command:
-
+To start the application, use the created shortcut or run:
 ```bash
-python dialogue_editor.py
+run_Dialogue_Editor.bat
 ```
-
-### Interface Usage
-
-1. **Load Dialogues**: Go to the `File` menu and select `Load Dialogues` to load a text file containing dialogues.
-2. **Load Image**: Go to the `File` menu and select `Load Image` to load an image.
-3. **Load Font**: Go to the `File` menu and select `Load Font` to load a custom font.
-4. **Save Dialogues**: Use the `Save` or `Save As` options in the `File` menu to save the edits made to the dialogues.
-5. **Translation**: Select the source and target languages in the comboboxes and click `Translate File` to translate the entire file or `Translate Line` to translate a specific line.
-6. **Navigation**: Use the `Previous Page` and `Next Page` buttons to navigate between the dialogue pages. (If applicable)
-7. **Customization**: Use the `Font Size` and `Text Position` entries to adjust the appearance of the text overlay on the image.
 
 ## Credits
 
-Created by: Rafael Godoy & Krisp
+Created by: **Rafael Godoy & Krisp**
 
 - **GitHub**: [RafaelGodoyEbert](https://github.com/RafaelGodoyEbert)
 - **X (Twitter)**: [GodoyEbert](https://twitter.com/GodoyEbert)
 - **YouTube**: [Godoyy](https://youtube.com/@Godoyy)
-- **Email**: rafaelgodebert@gmail.com
+- **E-mail**: rafaelgodebert@gmail.com
 
 **Support the project:**
-
 - **PIX**: rafaelgodebert@gmail.com
-- **PayPal**: [Click here](https://www.paypal.com/donate?hosted_button_id=XXXXX)
 
 ## License
 
-This project is licensed under the terms of the GPL license. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the terms of the GPL license.

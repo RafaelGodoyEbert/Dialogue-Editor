@@ -1,73 +1,53 @@
-# Dialogue Editor by RafaGodoy & Krisp
+# Dialogue Editor Premium by RafaGodoy & Krisp
 [English](https://github.com/RafaelGodoyEbert/Dialogue-Editor/blob/main/README.md) [Português](https://github.com/RafaelGodoyEbert/Dialogue-Editor/blob/main/README_portuguese.md)
 
-![image](https://github.com/RafaelGodoyEbert/Dialogue-Editor/assets/78083427/ce9991bb-788a-453c-a244-d16e296927d7)
+<img width="1276" height="832" alt="image" src="https://github.com/user-attachments/assets/865b2e3c-722b-41be-b3a4-d20a083b4908" />
 
 ## Sobre o Projeto
 
-O **Dialogue Editor** é uma ferramenta de edição de diálogos interativos, criada por Rafael Godoy & Krisp. Esta aplicação permite carregar diálogos de arquivos de texto, exibi-los e editá-los diretamente em uma interface gráfica. Além disso, você pode traduzir os diálogos para diferentes idiomas e sobrepor texto em imagens.
+O **Dialogue Editor Premium** é uma ferramenta avançada para edição e visualização de diálogos, reconstruída do zero em **PySide6** para oferecer uma experiência fluida e profissional. O objetivo é permitir que tradutores e editores visualizem o resultado final do texto dentro do jogo (em tempo real sobre imagens de fundo) enquanto trabalham, facilitando o ajuste de quebras de linha e posicionamento.
 
-## Funcionalidades
+### ⚠️ Filosofia de Tradução e IA
+Este projeto integra ferramentas de tradução automática como um **auxílio**, não como um substituto. Acreditamos que a IA deve ser usada como um suporte para acelerar o fluxo de trabalho e sugerir caminhos, mas nunca como um "amuleto" ou muleta definitiva. A revisão humana, o contexto cultural e a sensibilidade do tradutor são indispensáveis para uma localização de qualidade.
 
-- **Carregar e Salvar Diálogos**: Abra e salve arquivos de texto contendo diálogos.
-- **Edição de Texto**: Edite os diálogos diretamente na interface gráfica.
-- **Filtro de Pesquisa**: Pesquise diálogos específicos.
-- **Tradução**: Traduza os diálogos usando o Google Translate.
-- **Sobreposição de Texto em Imagens**: Carregue uma imagem e sobreponha texto nela.
-- **Navegação entre Páginas**: Navegue entre diferentes páginas de diálogo.
-- **Escolha de Fonte e Cor do Texto**: Personalize a fonte e a cor do texto.
+## Funcionalidades Novas (Versão Premium)
+
+- **Engine PySide6**: Interface moderna, rápida e totalmente responsiva.
+- **Sistema de Temas**: Escolha entre os modos **Light**, **Dark (Midnight)** e **Mocha (Catppuccin)** para maior conforto visual.
+- **Modo Comparação (Dual View)**: Visualize o texto original (em inglês) e a sua tradução lado a lado, tanto no editor quanto na imagem de preview.
+- **Preview Adaptativo**: A imagem se ajusta automaticamente à resolução da janela sem perder a proporção.
+- **Fundo de Imagem Inteligente**: Suporte a PNGs transparentes que se adaptam automaticamente à cor do tema escolhido.
+- **Persistência de Configurações**: O programa lembra seu último tema, última imagem usada, fonte, cores e posições.
+- **Tradução Integrada**: Traduza linhas individuais ou arquivos completos com suporte a barra de progresso.
 
 ## Como Usar
 
 ### Requisitos
 
-- Python 3.x
-- Bibliotecas:
-  - `tkinter`
-  - `Pillow`
-  - `googletrans`
-  - `tqdm`
-  - `i18n`
+- Python 3.10 ou superior
+- Bibliotecas: `PySide6`, `Pillow`, `googletrans`
 
 ### Instalação
 
 1. Clone o repositório:
-
 ```bash
 git clone https://github.com/RafaelGodoyEbert/Dialogue-Editor
 cd dialogue-editor
 ```
 
-2. Instale as dependências:
-
-```bash
-python -m venv myenv
-myenv\Scripts\activate
-
-pip install -r requirements.txt
-```
+2. Use o instalador automático (Windows):
+Execute o arquivo `install.bat`. Ele criará o ambiente virtual e instalará todas as dependências necessárias.
 
 ### Executando o Aplicativo
 
-Para iniciar o aplicativo, execute o seguinte comando:
-
+Para iniciar o aplicativo, use o atalho criado ou execute:
 ```bash
-python dialogue_editor.py
+run_Dialogue_Editor.bat
 ```
-
-### Uso da Interface
-
-1. **Carregar Diálogos**: Vá até o menu `Arquivo` e selecione `Carregar Dialogos` para carregar um arquivo de texto contendo diálogos.
-2. **Carregar Imagem**: Vá até o menu `Arquivo` e selecione `Carregar Imagem` para carregar uma imagem.
-3. **Carregar Fonte**: Vá até o menu `Arquivo` e selecione `Carregar Fonte` para carregar uma fonte personalizada.
-4. **Salvar Diálogos**: Use as opções `Salvar` ou `Salvar como...` no menu `Arquivo` para salvar as edições feitas nos diálogos.
-5. **Tradução**: Selecione os idiomas de origem e destino nas comboboxes e clique em `Traduzir arquivo` para traduzir o arquivo inteiro ou `Traduzir linha` para traduzir uma linha específica.
-6. **Navegação**: Use os botões `Página anterior` e `Próxima Página` para navegar entre as páginas de diálogo. (Se for aplicável)
-7. **Personalização**: Utilize as entradas de `Tamanho da fonte` e `Posição do texto` para ajustar a aparência do texto sobreposto na imagem.
 
 ## Créditos
 
-Criado por: Rafael Godoy & Krisp
+Criado por: **Rafael Godoy & Krisp**
 
 - **GitHub**: [RafaelGodoyEbert](https://github.com/RafaelGodoyEbert)
 - **X (Twitter)**: [GodoyEbert](https://twitter.com/GodoyEbert)
@@ -75,10 +55,9 @@ Criado por: Rafael Godoy & Krisp
 - **E-mail**: rafaelgodebert@gmail.com
 
 **Apoie o projeto:**
-
 - **PIX**: rafaelgodebert@gmail.com
-- **PayPal**: [Clique aqui](https://www.paypal.com/donate?hosted_button_id=XXXXX)
 
 ## Licença
 
-Este projeto está licenciado sob os termos da licença GPL. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está licenciado sob os termos da licença GPL.
+
