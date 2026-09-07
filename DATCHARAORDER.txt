@@ -1,0 +1,85 @@
+[sel charaorder_se top]
+[f 0 5 65278][f 2 1]Yes[e]
+[f 0 5 65278][f 2 1]No[e]
+
+[msg charaorder_Hero_00]
+[f 0 5 65278][f 2 1]We need to expose her trickery.[n]Should I send someone to do it...?[n][f 1 1][e]
+
+[msg charaorder_Hero_01]
+[f 0 5 65278][f 2 1]Dummy[n][f 1 1][e]
+
+[msg charaorder_Hero_02]
+[f 0 5 65278][f 2 1]Dummy[n][f 1 1][e]
+
+[msg charaorder_Reiji_00 [Ryuji]]
+[f 0 5 65278][f 2 1][f 4 6 0 2 102 65535 0][f 4 10 65535 0 0][f 3 1 8 0 2 1030 0 2]We don't wanna let her keep scammin'[n]us, right?[n][f 1 1][e]
+
+[msg charaorder_Reiji_01 [Ryuji]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1037 0 2]I can go whenever.[n][f 1 1][e]
+
+[msg charaorder_Reiji_02 [Ryuji]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1044 0 2]Leave it to me![n][f 1 1][e]
+
+[msg charaorder_Morgana_00 [Morgana]]
+[f 0 5 65278][f 2 1][f 4 6 0 3 2 65535 0][f 4 10 65535 0 0][f 3 1 8 0 2 1031 0 3]Joker, choose someone to send![n][f 1 1][e]
+
+[msg charaorder_Morgana_01 [Morgana]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1038 0 3]I'll show off my perfect accuracy![n][f 1 1][e]
+
+[msg charaorder_Morgana_02 [Morgana]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1045 0 3]I'm off![n][f 1 1][e]
+
+[msg charaorder_Ann_00 [Ann]]
+[f 0 5 65278][f 2 1][f 4 6 0 4 102 65535 0][f 4 10 65535 0 0][f 3 1 8 0 2 1032 0 4]We gotta stop this.[n][f 1 1][e]
+
+[msg charaorder_Ann_01 [Ann]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1039 0 4]You want me to do it...? Okay, I'll give it[n]my all.[n][f 1 1][e]
+
+[msg charaorder_Ann_02 [Ann]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1046 0 4]Okay, Joker![n][f 1 1][e]
+
+[msg charaorder_Yugo_00 [Yusuke]]
+[f 0 5 65278][f 2 1][f 4 6 0 5 102 65535 0][f 4 10 65535 0 0][f 3 1 8 0 2 1033 0 5]How dare she make such fools of us...[n][f 1 1][e]
+
+[msg charaorder_Yugo_01 [Yusuke]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1040 0 5]I'm going to go? Well, I will try my hardest.[n][f 1 1][e]
+
+[msg charaorder_Yugo_02 [Yusuke]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1047 0 5]Very well. Hang in there.[n][f 1 1][e]
+
+[msg charaorder_Makoto_00 [Makoto]]
+[f 0 5 65278][f 2 1][f 4 6 0 6 102 65535 0][f 4 10 65535 0 0][f 3 1 8 0 2 1034 0 6]We must stop my sister...[n][f 1 1][e]
+
+[msg charaorder_Makoto_01 [Makoto]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1041 0 6]As long as I get close, even this gun[n]should work...[n][f 1 1][e]
+
+[msg charaorder_Makoto_02 [Makoto]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1048 0 6]Okay... I'll give it a try![n][f 1 1][e]
+
+[msg charaorder_Ranko_00 [Haru]]
+[f 0 5 65278][f 2 1][f 4 6 0 7 102 65535 0][f 4 10 65535 0 0][f 3 1 8 0 2 1035 0 7]We cannot allow this cheating to[n]continue...[n][f 1 1][e]
+
+[msg charaorder_Ranko_01 [Haru]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1042 0 7]I'm ready whenever.[n][f 1 1][e]
+
+[msg charaorder_Ranko_02 [Haru]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1049 0 7]Okay, I'll go![n][f 1 1][e]
+
+[msg charaorder_Hutaba_00 [Futaba]]
+[f 0 5 65278][f 2 1]Dummy datCharaOrder[n][f 1 1][e]
+
+[msg charaorder_Hutaba_01 [Futaba]]
+[f 0 5 65278][f 2 1]Dummy datCharaOrder[n][f 1 1][e]
+
+[msg charaorder_Hutaba_02 [Futaba]]
+[f 0 5 65278][f 2 1]Dummy datCharaOrder[n][f 1 1][e]
+
+[msg charaorder_Akechi_00 [Akechi]]
+[f 0 5 65278][f 2 1][f 4 6 0 9 102 65535 0][f 4 10 65535 0 0][f 3 1 8 0 2 1036 0 9]Let us expose her treachery![n][f 1 1][e]
+
+[msg charaorder_Akechi_01 [Akechi]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1043 0 9]Leave it to me! I won't miss the mark![n][f 1 1][e]
+
+[msg charaorder_Akechi_02 [Akechi]]
+[f 0 5 65278][f 2 1][f 3 1 8 0 2 1050 0 9]Yes. I will pull it off without a hitch![n][f 1 1][e]
+
